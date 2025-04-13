@@ -7,7 +7,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 TOKEN = "7751933750:AAGlvaf2Ue79LHcLIdEDpD8W7mgUzFmKV8A"
 DEEPSEEK_API = "sk-70337bd08fd84abdbc5ef51e58f90e08"
 YANDEX_API = "aje8s4mem40cul2f37g4"
-ADMIN_CONTACT = "CardMagicBot@yandex.com"  # Ваша почта для жалоб
+ADMIN_CONTACT = "CardMagicBot@yandex.com"
 
 # Логирование
 def log(user_id, text):
@@ -18,6 +18,10 @@ def log(user_id, text):
 async def start(update: Update, context):
     warning = "⚠️ Изображения созданы ИИ. Не используйте их в коммерческих целях без разрешения!"
     await update.message.reply_text(f"Привет! Напиши текст для открытки.\n\n{warning}")
+
+# Команда /donate
+async def donate(update: Update, context):
+    await update.message.reply_text("Оплатите 50 руб: https://example.com/donate-link")
 
 # Жалобы через /report
 async def report(update: Update, context):
@@ -30,7 +34,7 @@ async def report(update: Update, context):
 async def generate_card(update: Update, context):
     user_id = update.message.from_user.id
     user_text = update.message.text
-    log(user_id, user_text)  # Сохраняем логи
+    log(user_id, user_text)
 
     try:
         # Генерация текста через DeepSeek
@@ -57,23 +61,11 @@ async def generate_card(update: Update, context):
 # Запуск бота
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
+    
+    # Регистрируем все обработчики
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("report", report))
+    app.add_handler(CommandHandler("donate", donate))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, generate_card))
-    app.run_polling() async def donate(update: Update, context):
-    await update.message.reply_text("Оплатите 100 руб: https://www.donationalerts.com/widget/goal/8696196?token=xGrjipJxWhxvxaNMYIT3")
-# И добавьте обработчик в блок __main__:
-app.add_handler(CommandHandler("donate", donate))# Добавьте эту функцию ДО блока if __name__ == "__main__":
-async def donate(update: Update, context):
-    await update.message.reply_text("Оплатите 50 руб: ВАША_ССЫЛКА_ОТ_DONATEBOT")
-
-if __name__ == "__main__":
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("donate", donate))  # Добавьте эту строку
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, generate_card))
+    
     app.run_polling()
-    from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-async def donate(update: Update, context):
-    await update.message.reply_text("...")  # ← отступ здесь
