@@ -63,4 +63,17 @@ if __name__ == "__main__":
     app.run_polling() async def donate(update: Update, context):
     await update.message.reply_text("Оплатите 100 руб: https://www.donationalerts.com/widget/goal/8696196?token=xGrjipJxWhxvxaNMYIT3")
 # И добавьте обработчик в блок __main__:
-app.add_handler(CommandHandler("donate", donate))
+app.add_handler(CommandHandler("donate", donate))# Добавьте эту функцию ДО блока if __name__ == "__main__":
+async def donate(update: Update, context):
+    await update.message.reply_text("Оплатите 50 руб: ВАША_ССЫЛКА_ОТ_DONATEBOT")
+
+if __name__ == "__main__":
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("donate", donate))  # Добавьте эту строку
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, generate_card))
+    app.run_polling()
+    from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+async def donate(update: Update, context):
+    await update.message.reply_text("...")  # ← отступ здесь
